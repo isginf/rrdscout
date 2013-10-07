@@ -1,6 +1,8 @@
 import unittest
 import os
 import sys
+
+sys.path.insert(0, "../test")
 sys.path.append("../app")
 os.putenv("LANG", "C")
 
