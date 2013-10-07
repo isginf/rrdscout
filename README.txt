@@ -9,7 +9,7 @@ In contrast to other rrd web frontends it supports features like
 - Aggregated graphs
 - Multi-line graphs
 
-The installation process for different evironments is described in the file INSTALL.txt
+The installation process for different environments is described in the file INSTALL.txt
 For a quick evaluation setup try the development server version by running
 
 ./run.py [ip] [port]

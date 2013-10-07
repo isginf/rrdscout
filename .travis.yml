@@ -5,7 +5,7 @@ python:
   - 2.7
 
 install:
-  - sudo apt-get install -qq librrd-dev
+  - sudo apt-get install -qq rrdtool librrd-dev
   - pip install -r requirements.txt --use-mirrors
 
 script: nosetests -w tests

@@ -5,6 +5,7 @@ Requirements
 * Pthon Pip
 * Python Virtualenv
 * A WSGI server (e.g. apache + mod_wsgi)
+* rrdtool
 
 
 Creating a virtualenv (optional)
