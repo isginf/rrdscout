@@ -157,14 +157,14 @@ class GraphTest(unittest.TestCase):
         self.graph.generate_graph()
         self.assertFalse(self.graph.generation_failed())
 
-    @timed(0.1)
+    @timed(0.2)
     def test_generate_multi_line_graph(self):
         self.graph.devices = ["localhost", "testhost"]
         self.graph.mode = MULTI_LINE
         self.graph.generate_graph()
         self.assertFalse(self.graph.generation_failed())
 
-    @timed(0.1)
+    @timed(0.2)
     def test_generate_aggregated_graph(self):
         self.graph.devices = ["localhost", "testhost"]
         self.graph.generate_graph()
