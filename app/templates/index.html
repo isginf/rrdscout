@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+    <p class='graphhead'>{{ _('Control panel') }}</p>
+    <p>
+      <form action="#" method="POST" id="controlpanel">
+	<label for="timespan">{{ _('Timespan') }}</label> <input type="number" name="timespan" id="timespan" class="help_box" placeholder="{{timespan}}" title="{{ _('timespan_input_help') }}"/>
+	<label for="device_filter">{{ _('Devices') }}</label> <input type="text" name="device_filter" id="device_filter" class="help_box" placeholder="{{device_filter}}" title="{{ _('devices_input_help') }}"/>
+	<label for="type_filter">{{ _('Data sources') }}</label> <input type="text" name="type_filter" id="type_filter" class="help_box" placeholder="{{type_filter}}" title="{{ _('units_input_help') }}"/>
+	<label for="reload_page">{{ _('Auto refresh') }}</label> <input type="checkbox" name="reload_page" id="reload_page" class="help_box" value="{{reload_page}}"{% if reload_page %} checked {% endif %} title="{{ _('reload_page_input_help') }}"/>
+	<input type="submit" value=" Ok "/>
+      </form>
+    </p>
+
+    <p class='graphhead'>{{ _('Summary') }}</p>
+    <p class="graphdata">
+    {% for plugin, types in plugins.iteritems() %}
+        {% for type_name, device_list in types.iteritems()|sort %}
+	      <a href="{{url_for('detail',
+		                  graph_device=device_list,
+				  graph_plugin=plugin,
+				  graph_type=type_name,
+				  time_from=time_from,
+				  time_to=time_to)}}">
+
+		  <img src="{{url_for('graphthumb',
+			    graph_devices=device_list,
+			    graph_plugin=plugin,
+			    graph_type=type_name,
+			    time_from=time_from,
+			    time_to=time_to)}}"
+		       class='graph'/>
+	      </a>
+        {% endfor %}
+    {% endfor %}
+    </p>
+
+    {% for device in devices %}
+    <p class='graphhead'>
+      <a href="{{url_for('device', graph_device=device.name)}}">{{device.name}}</a>
+    </p>
+
+        {% for plugin in device.plugins %}
+            <p class="graphdata">
+            {% for type in plugin.types|sort %}
+	      <a href="{{url_for('detail',
+		                  graph_device=device.index,
+				  graph_plugin=plugin.name,
+				  graph_type=type,
+				  time_from=time_from,
+				  time_to=time_to)}}">
+
+		  <img src="{{url_for('graphthumb',
+			    graph_devices=device.index,
+			    graph_plugin=plugin.name,
+			    graph_type=type,
+			    time_from=time_from,
+			    time_to=time_to)}}"
+		       class="graph"/>
+	      </a>
+            {% endfor %}
+            </p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

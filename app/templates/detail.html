@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<p id="page_title"><img src="/static/images/data_source.png"/>
+  <a href="{{url_for('detail',
+	   graph_device=graph_device,
+	   graph_plugin=graph_plugin,
+	   graph_type=graph_type,
+	   time_from=time_from,
+	   time_to=time_to)}}">
+    {{graph_type|translate}}
+  </a>
+@
+{% for device in graph_title %}
+<a href="{{url_for('device', graph_device=device)}}">
+{{device|hostname}}
+</a>
+{% endfor %}</p>
+<hr/>
+<table class="graphdata">
+  <tr><td>{{ _('Day') }}</td><td>{{ _('Week') }}</td><td>{{ _('Month') }}</td><td>{{ _('Year') }}</td></tr>
+  <tr>
+    <td>
+      <img src="{{url_for('graphthumb',
+		graph_devices=graph_device,
+		graph_plugin=graph_plugin,
+		graph_type=graph_type,
+		graph_mode=graph_mode,
+		time_from=time_from_day,
+		time_to=time_to)}}"
+	   class="graph"/>
+    </td>
+    <td>
+      <img src="{{url_for('graphthumb',
+		graph_devices=graph_device,
+		graph_plugin=graph_plugin,
+		graph_type=graph_type,
+		graph_mode=graph_mode,
+		time_from=time_from_week,
+		time_to=time_to)}}"
+	   class="graph"/>
+    </td>
+    <td>
+      <img src="{{url_for('graphthumb',
+		graph_devices=graph_device,
+		graph_plugin=graph_plugin,
+		graph_type=graph_type,
+		graph_mode=graph_mode,
+		time_from=time_from_month,
+		time_to=time_to)}}"
+	   class="graph"/>
+    </td>
+    <td>
+      <img src="{{url_for('graphthumb',
+		graph_devices=graph_device,
+		graph_plugin=graph_plugin,
+		graph_type=graph_type,
+		graph_mode=graph_mode,
+		time_from=time_from_year,
+		time_to=time_to)}}"
+	   class="graph"/>
+  </td>
+  </tr>
+</table>
+<hr/>
+<form action='#' method="POST" id="graphdetail_timeform">
+  <label for="time_from">{{ _('From') }}:</label> <input type="datetime" name="time_from" id="time_from" class="help_box" placeholder="{{time_from_str}}" title="{{ _('graph_detail_time_from_input_help') }}"/>
+  <label for="time_to">{{ _('To') }}:</label> <input type="datetime" name="time_to" id="time_to" class="help_box" placeholder="{{time_to_str}}" title="{{ _('graph_detail_time_to_input_help') }}"/>
+  <label for="comment">{{ _('Comment') }}:</label> <input type="text" name="comment" id="comment" class="help_box" size=100 maxsize=170 placeholder="{{graph_comment}}" title="{{ _('graph_detail_comment_input_help') }}"/>
+<input type="submit" name="update_graph" value="{{ _('Update') }}"/>
+<input type="submit" name="export_graph" value="{{ _('Export data') }}"/>
+</form>
+
+<hr/>
+
+<p class="graphdata">
+  <img src="{{url_for('graph',
+	    graph_devices=graph_device,
+	    graph_plugin=graph_plugin,
+	    graph_type=graph_type,
+	    graph_comment=graph_comment,
+	    graph_mode=graph_mode,
+	    time_from=time_from,
+	    time_to=time_to)}}"
+       class="graph"/>
+</p>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<p id="page_title"><img src="/static/images/devices.png"/> {{graph_device}}</p>
+<hr/>
+
+<table class="graphdata">
+  <tr><td>{{ _('Day') }}</td><td>{{ _('Week') }}</td><td>{{ _('Month') }}</td><td>{{ _('Year') }}</td></tr>
+
+  {% for plugin in plugins %}
+      {% for type_name in plugin.types %}
+         <tr><td class="graphhead" colspan="4">{{type_name|translate(device=graph_device)}}</td></tr>
+	 <tr><td class="graphdata">
+            <a href="{{url_for('detail',
+		     graph_device=graph_device,
+		     graph_plugin=plugin.name,
+		     graph_type=type_name,
+		     time_from=time_from_day,
+		     time_to=time_to)}}">
+
+	    <img src="{{url_for('graphthumb',
+		      graph_devices=graph_device,
+		      graph_plugin=plugin.name,
+		      graph_type=type_name,
+		      time_from=time_from_day,
+		      time_to=time_to)}}"
+		 class='graph'/>
+	    </a>
+	   </td>
+	   <td class="graphdata">
+            <a href="{{url_for('detail',
+		     graph_device=graph_device,
+		     graph_plugin=plugin.name,
+		     graph_type=type_name,
+		     time_from=time_from_week,
+		     time_to=time_to)}}">
+
+	    <img src="{{url_for('graphthumb',
+		      graph_devices=graph_device,
+		      graph_plugin=plugin.name,
+		      graph_type=type_name,
+		      time_from=time_from_week,
+		      time_to=time_to)}}"
+		 class='graph'/>
+	    </a>
+	   </td>
+	   <td class="graphdata">
+            <a href="{{url_for('detail',
+		     graph_device=graph_device,
+		     graph_plugin=plugin.name,
+		     graph_type=type_name,
+		     time_from=time_from_month,
+		     time_to=time_to)}}">
+
+	    <img src="{{url_for('graphthumb',
+		      graph_devices=graph_device,
+		      graph_plugin=plugin.name,
+		      graph_type=type_name,
+		      time_from=time_from_month,
+		      time_to=time_to)}}"
+		 class='graph'/>
+	    </a>
+	   </td>
+	   <td class="graphdata">
+            <a href="{{url_for('detail',
+		     graph_device=graph_device,
+		     graph_plugin=plugin.name,
+		     graph_type=type_name,
+		     time_from=time_from_year,
+		     time_to=time_to)}}">
+
+	    <img src="{{url_for('graphthumb',
+		      graph_devices=graph_device,
+		      graph_plugin=plugin.name,
+		      graph_type=type_name,
+		      time_from=time_from_year,
+		      time_to=time_to)}}"
+		 class='graph'/>
+	    </a>
+	   </td>
+	 </tr>
+      {% endfor %}
+   {% endfor %}
+</table>
+{% endblock %}

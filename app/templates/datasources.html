@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+{{ _('This is a list of plugins and their respective data sources') }}
+    {% for plugin, types in plugins.iteritems() %}
+        <p class="graphhead">{{plugin}}</p>
+        <ul id='device_list'>
+        {% for type_name, device_list in types.iteritems()|sort %}
+           <a href="{{url_for('detail',
+		    graph_device=device_list,
+		    graph_plugin=plugin,
+		    graph_type=type_name,
+		    time_from=time_from,
+		    time_to=time_to,
+                    graph_mode='multi-line')}}">
+              <li>
+		<img src="/static/images/data_source.png"/>{{type_name}} -&gt; {{type_name|translate}}
+	      </li>
+	   </a>
+        {% endfor %}
+	</ul>
+    {% endfor %}
+{% endblock %}

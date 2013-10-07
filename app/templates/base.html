@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% if reload_page %}
+    <meta http-equiv="refresh" content="{{reload_interval}} URL=#">
+    {% endif %}
+    <link href="/static/css/{{css_file}}" rel="stylesheet" type="text/css" />
+    <title>rrdscout</title>
+  </head>
+  <body>
+    <div id="page_name">.:: {{page_name}}</div>
+    <div id="logo"><a href="{{logo_link}}"><img src="/static/images/{{logo_image}}"/></a></div>
+
+    <nav id="navigationbar">
+      <ul id="navigation">
+	<li>
+	  <a href="{{url_for('index')}}"><img src="/static/images/overview.png"/> {{ _('Overview') }}</a>
+	</li>
+	<li>
+	  <a href="{{url_for('devices')}}"><img src="/static/images/devices.png"/> {{ _('Devices') }}</a>
+	</li>
+	<li>
+	  <a href="{{url_for('datasources')}}"><img src="/static/images/data_source.png"/> {{ _('Data Sources') }}</a>
+	</li>
+	<li>
+	  <a href="{{help_link}}"><img src="/static/images/help.png"/> {{ _('Get help') }}</a>
+	</li>
+      </ul>
+    </nav>
+
+    <section id="content">
+      {% block content %}{% endblock %}
+    </section>
+
+    <footer id="footer">
+      &copy ETH Zurich | <a href="{{url_for('disclaimer')}}">{{ _('Disclaimer') }}</a> | {{current_date}} | Icons from <a href="http://www.iconarchive.com/">IconArchive</a>
+    </footer>
+  </body>
+</html>

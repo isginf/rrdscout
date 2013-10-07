@@ -1,0 +1,98 @@
+Requirements
+------------
+
+* Python 2.6
+* Pthon Pip
+* Python Virtualenv
+* A WSGI server (e.g. apache + mod_wsgi)
+
+
+Creating a virtualenv (optional)
+--------------------------------
+
+* mkdir /opt/virtualenvs/
+* virtualenv /opt/virtualenvs/rrdscout
+* source /opt/virtualenvs/rrdscout/bin/activate
+
+
+Install a different Python interpreter for virtualenv (optional)
+----------------------------------------------------------------
+
+* cd /opt/virtualenvs/rrdscout
+* wget http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
+* tar xvf Python-2.7.5.tar.bz2
+* cd Python-2.7.5
+* ./configure --prefix=/opt/virtualenvs/rrdscout; make; make install
+
+
+Install required Python modules
+--------------------------------
+
+* pip install -r requirements.txt
+
+
+Create user / group (optional)
+------------------------------
+
+* useradd rrdscout
+
+
+Generate SSL certificate (optional)
+-----------------------------------------------
+
+* openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/ssl/certs/rrdscout.key -out /etc/ssl/certs/rrdscout.crt.pem
+
+
+Setup up WSGI server (e.g. Gunicorn and optional Nginx)
+-------------------------------------------------------
+
+* pip install gunicorn
+* cd rrdscout
+* gunicorn -w 4 -D –bind unix:/tmp/gunicorn.sock app:app
+* Nginx config
+
+server {
+  location / {
+    proxy_pass unix:/tmp/gunicorn.sock;
+  }
+}
+
+
+Setup up WSGI server (e.g. Apache with mod_wsgi)
+------------------------------------------------
+
+* Apache config (check paths and optional user / ssl config settings)
+
+<VirtualHost *:80>
+   RedirectMatch ^/(.*)$ https://$SERVER_HOST/$1
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName rrdscout
+
+    WSGIDaemonProcess rrdscout user=rrdscout group=rrdscout threads=5
+    WSGIScriptAlias / /opt/rrdscout/run.wsgi
+
+    <Location />
+        AuthType basic
+        AuthBasicProvider file
+        AuthUserFile /etc/httpd/rrdscout.pass
+        AuthName "Secure access to rrdscout"
+        Require valid-user
+    </Location>
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/rrdscout.crt.pem
+    SSLCertificateKeyFile /etc/ssl/certs/rrdscout.key
+
+    <Directory /opt/rrdscout/app/>
+        WSGIProcessGroup rrdscout
+        WSGIApplicationGroup %{GLOBAL}
+    </Directory>
+
+</VirtualHost>
+
+* Check paths in run.wsgi, comment out activate_this lines if you dont use
+a virtualenv and change the SECRET_KEY eg.
+>>> import os
+>>> os.urandom(24)

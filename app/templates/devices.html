@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<ul id='device_list'>
+  {% for device in devices %}
+    <a href="{{url_for('device', graph_device=device)}}">
+      <li>
+      <img src="/static/images/devices.png"/> {{device}}
+      </li>
+    </a>
+  {% endfor %}
+</ul>
+{% endblock %}
