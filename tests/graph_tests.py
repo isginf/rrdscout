@@ -38,7 +38,7 @@ class GraphTest(unittest.TestCase):
         self.assertEqual(self.graph.time_to, self.time_to)
         self.assertEqual(self.graph.width, self.width)
         self.assertEqual(self.graph.height, self.height)
-        self.assertTrue(self.graph.out_file != "")
+        self.assertEqual(str(self.graph.out_file.__class__), "tempfile._TemporaryFileWrapper")
 
 
     def test_generate_defs(self):
@@ -47,28 +47,14 @@ class GraphTest(unittest.TestCase):
         self.assertTrue(self.graph._def_map)
         self.assertTrue(self.graph._metadata)
         self.assertEqual(type(self.graph._metadata['max0']), dict, "metadata has key max0 with value dict of metadata")
-        self.assertTrue(self.graph._def_map['def_mA_average_0'], "def_mA_average_0 in " + str(self.graph._def_map))
+        self.assertEqual(self.graph._def_map['def_mA_average_0'], "average0")
 
     def test_generate_defs_fails_with_unknown_host(self):
         self.graph.devices[0] = "unfug"
         self.graph._generate_defs()
         self.assertFalse(self.graph._defs)
 
-        
-    def test_generate_defs_twice(self):
-        self.graph._generate_defs()
-        count = len(self.graph._defs)
-        self.graph._generate_defs()
-        
-        self.assertEqual(len(self.graph._defs), count)
-        
-    def test_generate_cdefs_twice(self):
-        self.graph._generate_defs()
-        self.graph._generate_cdefs()
-        count = len(self.graph._cdefs)
-        self.graph._generate_cdefs()
-        self.assertEqual(len(self.graph._cdefs), count)
-        
+
     def test_generate_cdefs(self):
         self.graph._generate_defs()
         self.graph._generate_cdefs()
@@ -88,19 +74,11 @@ class GraphTest(unittest.TestCase):
         self.assertFalse(self.graph._cdef_map)
         self.assertFalse(self.graph._cdefs)
 
-    def test_generate_lines_twice(self):
-        self.graph._generate_defs()
-        self.graph._generate_cdefs()
-        self.graph._generate_lines()
-        count = len(self.graph._lines)
-        self.graph._generate_lines()              
-        self.assertTrue(len(self.graph._lines) == count)
-        
     def test_generate_lines(self):
         self.graph._generate_defs()
         self.graph._generate_cdefs()
         self.graph._generate_lines()
-        self.assertTrue(len(self.graph._lines) == 1)
+        self.assertEqual(len(self.graph._lines), 1)
         self.assertEqual(type(self.graph._lines[0]),pyrrd.graph.Line, "lines stores Line objects")
 
     def test_generate_multi_lines(self):
@@ -111,7 +89,7 @@ class GraphTest(unittest.TestCase):
         self.graph._generate_cdefs()
         self.graph._generate_lines()
         print self.graph._lines
-        self.assertTrue(len(self.graph._lines) == 2)
+        self.assertEqual(len(self.graph._lines), 2)
 
     def test_generate_lines_fails_without_defs_and_cdefs(self):
         self.graph._generate_lines()
@@ -121,21 +99,13 @@ class GraphTest(unittest.TestCase):
         self.graph._generate_defs()
         self.graph._generate_cdefs()
         self.graph._generate_areas()
-        self.assertTrue(len(self.graph._areas) == 2)
+        self.assertEqual(len(self.graph._areas), 2)
         self.assertEqual(type(self.graph._areas['min'][0]),pyrrd.graph.Area, "areas stores Area objects")
 
     def test_generate_areas_fails_without_defs_and_cdefs(self):
         self.graph._generate_areas()
         self.assertFalse(self.graph._areas)
 
-    def test_generate_table_twice(self):
-        self.graph._generate_defs()
-        self.graph._generate_cdefs()
-        self.graph._generate_table()
-        count = len(self.graph._gprints)
-        self.graph._generate_table()
-        self.assertEqual(len(self.graph._gprints), count)
-        
     def test_generate_table(self):
         self.graph._generate_defs()
         self.graph._generate_cdefs()
@@ -166,7 +136,7 @@ class GraphTest(unittest.TestCase):
 
     def test_get_label_for_data_source(self):
         self.assertEqual(rrdscout.Graph.get_label_for_data_source("Total_W"), "W", "test with Total_W")
-        self.assertFalse(rrdscout.Graph.get_label_for_data_source(""), "empty input")
+        self.assertEqual(rrdscout.Graph.get_label_for_data_source(""), "")
         self.assertEqual(rrdscout.Graph.get_label_for_data_source("ETHZ"), "ETHZ", "unconvertable input")
 
 

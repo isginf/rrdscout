@@ -2,6 +2,7 @@ import unittest
 import os
 import sys
 sys.path.append("../app")
+os.putenv("LANG", "C")
 
 from rrd_utils import *
 
@@ -23,4 +24,6 @@ class UtilsTest(unittest.TestCase):
 
     def test_export_rrd_data(self):
         csv = export_rrd_data(self.device, self.plugin, self.data_source, self.time_from, self.time_to)
-        self.assertTrue("localhost;2013-10-03 14:10:48;8" in csv.read())
+        data = csv.read().splitlines()
+        self.assertEqual("Device;Time;Value", data[0])
+        self.assertEqual("localhost;2013-10-03 14:10:48;8.9440277778e+02", data[1])
