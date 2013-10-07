@@ -1,4 +1,4 @@
-RRDscout
+RRDscout  https://api.travis-ci.org/isginf/rrdscout.png
 --------
 
 RRDscout is a web frontend to generate rrd graphs from rrd files created by collectd.
