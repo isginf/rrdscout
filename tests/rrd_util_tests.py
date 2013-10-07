@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, "../test")
 sys.path.append("../app")
 os.putenv("LANG", "C")
+os.putenv("TZ", "Europe/Zurich")
 
 from rrd_utils import *
 
