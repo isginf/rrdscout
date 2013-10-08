@@ -1,6 +1,7 @@
 import unittest
 from nose.tools import timed
 import pyrrd
+import os
 import sys
 
 sys.path.insert(0, "../test")
@@ -9,6 +10,14 @@ sys.path.append("../")
 
 import rrdscout
 from rrdscout import Graph, MULTI_LINE
+
+def not_on_travis(decorator):
+  def wrapper(func):
+    if os.getenv("TRAVIS"):
+      return func
+    else:
+      return decorator(func)
+  return wrapper
 
 
 class GraphTest(unittest.TestCase):
@@ -152,19 +161,19 @@ class GraphTest(unittest.TestCase):
         self.graph.generate_attachment_name()
         self.assertEqual(self.graph.attachment_name, "snmp_milliampere-0.png")
 
-    @timed(0.1)
+    @not_on_travis(timed(0.1))
     def test_generate_graph(self):
         self.graph.generate_graph()
         self.assertFalse(self.graph.generation_failed())
 
-    @timed(0.2)
+    @not_on_travis(timed(0.1))
     def test_generate_multi_line_graph(self):
         self.graph.devices = ["localhost", "testhost"]
         self.graph.mode = MULTI_LINE
         self.graph.generate_graph()
         self.assertFalse(self.graph.generation_failed())
 
-    @timed(0.2)
+    @not_on_travis(timed(0.1))
     def test_generate_aggregated_graph(self):
         self.graph.devices = ["localhost", "testhost"]
         self.graph.generate_graph()
