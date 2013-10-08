@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/isginf/rrdscout.png)](https://travis-ci.org/isginf/rrdscout.png )
-
-RRDscout  
+RRDscout  [![Build Status](https://travis-ci.org/isginf/rrdscout.png)](https://travis-ci.org/isginf/rrdscout.png )
 ========
 
 RRDscout is a web frontend to generate rrd graphs from rrd files created by collectd.
@@ -16,3 +14,5 @@ The installation process for different environments is described in the file INS
 For a quick evaluation setup try the development server version by running
 
     ./run.py [ip] [port]
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/isginf/rrdscout/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
