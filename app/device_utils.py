@@ -79,6 +79,8 @@ def get_all_devices_and_plugins(device_filter="", type_filter="*"):
                 # type filter can be concatenated with |
                 # find all defined type (rrd) files
                 for type_pattern in type_filter.split("|"):
+                    type_pattern = "*" + type_pattern + "*"
+
                     for type_filename in glob.glob(os.path.join(device_dir, plugin_dir, type_pattern + ".rrd")):
                         type_name = os.path.basename(type_filename).replace('.rrd', '')
                         plugins.setdefault(plugin_dir, {})[type_name] = ""

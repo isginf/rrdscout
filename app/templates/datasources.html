@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-{{ _('This is a list of plugins and their respective data sources') }}
+<p class='graphhead'>{{ _('Control panel') }}</p>
+<p>
+  <form action="#" method="POST">
+    <label for="type_filter">{{ _('Data sources') }}</label> <input type="text" name="type_filter" id="type_filter" value="{{ type_filter }}" title="{{ _('units_input_help') }}"/> <input type="submit" value=" Ok "/>
+  </form>
+</p>
+
     {% for plugin, types in plugins.iteritems() %}
         <p class="graphhead">{{plugin}}</p>
         <ul id='device_list'>

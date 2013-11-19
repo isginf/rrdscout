@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<ul id='device_list'>
-  {% for device in devices %}
+<p class='graphhead'>{{ _('Control panel') }}</p>
+<p>
+  <form action="#" method="POST">
+    <label for="device_filter">{{ _('Devices') }}</label> <input type="text" name="device_filter" id="device_filter" value="{{ device_filter }}" title="{{ _('devices_input_help') }}"/> <input type="submit" value=" Ok "/>
+  </form>
+</p>
+
+<p class='graphhead'>{{ _('Device list') }}</p>
+<p class="graphdata">
+  <ul id='device_list'>
+    {% for device in devices %}
     <a href="{{url_for('device', graph_device=device)}}">
       <li>
-      <img src="/static/images/devices.png"/> {{device}}
+	<img src="/static/images/devices.png"/> {{device}}
       </li>
     </a>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </ul>
+</p>
+
 {% endblock %}

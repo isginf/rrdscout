@@ -117,24 +117,45 @@ def index():
 
 
 
-@app.route('/devices')
+@app.route('/devices', methods=["GET", "POST"])
 def devices():
     """
     List all devices
     """
-    devices = os.listdir(settings.COLLECTD_DIR)
+
+    if not session.get('device_filter'):
+        session['device_filter'] = "*"
+
+    if request.method == 'POST' and request.form.get('device_filter'):
+        session['device_filter'] = request.form.get('device_filter')
+    elif request.method == 'POST':
+        session['device_filter'] = "*"
+
+    devices = filter(lambda x: session['device_filter'].replace("*", "") in x,
+                     os.listdir(settings.COLLECTD_DIR))
 
     return render_template("devices.html",
                            page_name=settings.PAGE_NAME + ": " + gettext("Devices"),
+                           device_filter=session['device_filter'],
                            devices=sorted(devices))
 
 
-@app.route('/datasources')
+@app.route('/datasources', methods=["GET", "POST"])
 def datasources():
     """
     List all data sources (types)
     """
-    devices, plugins = get_all_devices_and_plugins()
+
+    if not session.get('type_filter') or session.get('type_filter') == settings.INDEX_TYPES:
+        session['type_filter'] = "*"
+
+    if request.method == 'POST' and request.form.get('type_filter'):
+        session['type_filter'] = request.form.get('type_filter')
+    elif request.method == 'POST':
+        session['type_filter'] = "*"
+
+    devices, plugins = get_all_devices_and_plugins("", session['type_filter'])
+    #devices, plugins = get_all_devices_and_plugins()
     time_from = int(time()) - 60*60
     time_to = int(time())
 
@@ -142,6 +163,7 @@ def datasources():
                            page_name=settings.PAGE_NAME + ": " + gettext("Data sources"),
                            time_from=time_from,
                            time_to=time_to,
+                           type_filter=session['type_filter'],
                            plugins=plugins)
 
 @app.route('/device/<regex("[a-zA-Z0-9,\-\.]+"):graph_device>', methods = ['GET'])
